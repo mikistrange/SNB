@@ -1,0 +1,5 @@
+#!/bin/bash
+cd Desktop
+mkfifo pipe
+gnome-terminal -e 'nano --noread pipe'
+gpg -c -a <pipe> com.gpg
