@@ -1,5 +1,33 @@
 #!/bin/bash
+
+#Change the working directory to Desktop.
+#This location can be anywhere on your system.
 cd Desktop
+
+#Create a named pipe and call it pipe.
+#The named pipe can be called anything you like.
 mkfifo pipe
+
+# Open the gnome terminal and start the Nano text editor.
+# If you are not using the gnome terminal you will have to change
+# this command to the type of terminal you are using.
+# You will also need to have Nano installed.
 gnome-terminal -e 'nano --noread pipe'
+
+# When the document is saved in Nano it will pipe the
+# contents out to GPG. You will need to have GnuPG installed
+# on your system. Submit your password x2.
 gpg -c -a <pipe> com.gpg
+qrencode -l M -r com.gpg -o qr1.png
+rm pipe com.gpg
+
+#THE FOLLOWING 3 LINES ARE FOR USING OPENSSL INSTEAD
+# OF GPG. UNCOMMENT THEM AND COMMENT OUT THE ABOVE
+# 3 LINES TO CHANGE THE MODE OF ENCRYPTION.
+
+#openssl aes-256-cbc -a -salt <pipe> com.txt
+#qrencode -l M -r com.txt -o qr1.png
+#rm pipe com.txt
+
+# This command will close the original terminal window.
+kill -9 $PPID
